@@ -1,15 +1,4 @@
-gitdb==4.0.12
-GitPython==3.1.44
-numpy==1.24.4
-packaging==24.2
-pandas==2.0.3
-pillow==10.4.0
-plotly==6.0.0
-protobuf==5.29.3
-PuLP ==2.8.0
-pyarrow==17.0.0
-pydeck==0.9.1
-Pygments==2.19.1
-python-dateutil==2.9.0.post0
-pytz==2025.1
-streamlit==1.40.1
+pandas==1.5.3
+plotly==5.13.0
+pulp==2.9
+streamlit==1.23.0
