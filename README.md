@@ -2,7 +2,7 @@
 
 This repository contains a dynamic, interactive workforce planning optimization model built with Python, Streamlit, and PuLP. The application helps organizations make informed workforce decisions by optimizing hiring, firing, and overtime usage while minimizing overall costs.
 
-👉 **[Workforce Planning App](https://workforceplanning-mdrxrdzzkx9uyo5k8zvfuk.streamlit.app/)**  
+👉 **[Launch Workforce Planning App](https://workforceplanning-mdrxrdzzkx9uyo5k8zvfuk.streamlit.app/)**  
 
 ## Features
 
