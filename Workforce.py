@@ -141,7 +141,7 @@ if use_auto_budget:
     budget = total_initial * effective_salary_cost * months
     st.sidebar.markdown(f"**Auto-Calculated Budget:** {budget:,.0f}")
 else:
-    budget = st.sidebar.number_input("Manual Budget", min_value=0, value=10000000, step=10000)
+    budget = st.sidebar.number_input("Manual Budget", min_value=0, value=budget, step=10000)
 st.sidebar.markdown(f"**Budget:** {budget:,.0f}")
 service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
 
