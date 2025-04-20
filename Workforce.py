@@ -135,7 +135,13 @@ overtime_rate = st.sidebar.number_input("Overtime Hours per Employee", min_value
 working_hours = st.sidebar.number_input("Working Hours per Employee per Month", min_value=1, value=166)
 
 # Budget and service rate
-budget = total_initial * effective_salary_cost * months
+use_auto_budget = st.sidebar.checkbox("Auto-calculate Budget", value=True)
+
+if use_auto_budget:
+    budget = total_initial * effective_salary_cost * months
+    st.sidebar.markdown(f"**Auto-Calculated Budget:** {budget:,.0f}")
+else:
+    budget = st.sidebar.number_input("Manual Budget", min_value=0, value=10000000, step=10000)
 st.sidebar.markdown(f"**Budget:** {budget:,.0f}")
 service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
 
