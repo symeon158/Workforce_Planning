@@ -85,7 +85,21 @@ def solve_workforce_planning(months, hiring_cost, firing_cost, effective_salary_
     return results
 
 # ----------------- Streamlit App -----------------
-st.title("Workforce Planning Optimization Model")
+st.markdown("""
+    <style>
+        .app-title {
+            font-size: 40px;
+            font-weight: 700;
+            text-align: center;
+            color: #2c3e50;
+            padding: 20px 0;
+            border-bottom: 3px solid #3498db;
+            margin-bottom: 30px;
+        }
+    </style>
+    <div class="app-title">Workforce Planning Optimization Model</div>
+""", unsafe_allow_html=True)
+
 
 # Sidebar: Dynamic Grade Inputs
 st.sidebar.header("Grade Settings")
