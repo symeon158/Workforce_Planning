@@ -138,7 +138,7 @@ working_hours = st.sidebar.number_input("Working Hours per Employee per Month", 
 use_auto_budget = st.sidebar.checkbox("Auto-calculate Budget", value=True)
 
 # Precompute the suggested default budget
-default_budget = total_initial * effective_salary_cost * months
+default_budget = total_initial * effective_salary_cost * months + 150000
 
 if use_auto_budget:
     budget = default_budget
