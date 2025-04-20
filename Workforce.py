@@ -89,7 +89,7 @@ st.title("Workforce Planning Optimization Model")
 
 # Sidebar: Dynamic Grade Inputs
 st.sidebar.header("Grade Settings")
-num_grades = st.sidebar.number_input("Number of Grades", min_value=1, value=4, step=1)
+num_grades = st.sidebar.number_input("Number of Grades", min_value=1, value=1, step=1)
 grade_data = []  # List to store tuples: (grade_name, count, salary)
 for i in range(int(num_grades)):
     # Create three columns for a nicer layout
@@ -135,7 +135,8 @@ overtime_rate = st.sidebar.number_input("Overtime Hours per Employee", min_value
 working_hours = st.sidebar.number_input("Working Hours per Employee per Month", min_value=1, value=166)
 
 # Budget and service rate
-budget = st.sidebar.number_input("Budget", min_value=0, value=10000000, step=10000)
+budget = total_initial * effective_salary_cost * months
+st.sidebar.markdown(f"**Budget:** {budget:,.0f}")
 service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
 
 # Demand input for each month (in hours)
