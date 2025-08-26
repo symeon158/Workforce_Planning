@@ -57,11 +57,12 @@ For each month \( i \) (\( i = 1, 2, \dots, N \)):
 - \( O_i \): Total overtime hours worked in month \( i \).  
 - \( U_i \): Unmet demand (in hours) in month \( i \) that incurs a penalty.  
 
-### Objective Function
+---
 
+### Objective Function
 Minimize the total cost:
 
-\[
+$$
 Z = \sum_{i=1}^{N} \Big( 
 \text{hiring\_cost} \cdot H_i +
 \text{firing\_cost} \cdot F_i +
@@ -69,61 +70,70 @@ Z = \sum_{i=1}^{N} \Big(
 \text{overtime\_cost} \cdot O_i +
 \text{penalty\_cost} \cdot U_i
 \Big)
-\]
+$$
 
-### Constraints
+---
 
-**1. Workforce Balance**
-- First month:  
-  \[
-  E_1 = \text{initial\_employees} + H_1 - F_1
-  \]
-- Subsequent months (\( i \geq 2 \)):  
-  \[
-  E_i = E_{i-1} + H_i - F_i
-  \]
+### Constraints  
 
-**2. Production Capacity**
-\[
+**1. Workforce Balance**  
+First month:  
+$$
+E_1 = \text{initial\_employees} + H_1 - F_1
+$$
+
+Subsequent months ($ i \geq 2 $):  
+$$
+E_i = E_{i-1} + H_i - F_i
+$$
+
+---
+
+**2. Production Capacity**  
+$$
 E_i \times \text{working\_hours} + O_i + U_i \geq \text{demand}_i \times \text{service\_rate}
-\]
+$$  
 
-**3. Overtime Limit**
-\[
+---
+
+**3. Overtime Limit**  
+$$
 O_i \leq E_i \times \text{overtime\_rate}
-\]
+$$  
 
-**4. Budget Constraint**
-\[
+---
+
+**4. Budget Constraint**  
+$$
 \sum_{i=1}^{N} 
 \Big( \text{hiring\_cost} \cdot H_i +
        \text{firing\_cost} \cdot F_i +
        \text{salary\_cost} \cdot E_i +
        \text{overtime\_cost} \cdot O_i
 \Big) \leq \text{Budget}
-\]
+$$  
 
 ---
 
-## Handling Employee Grades
+## Handling Employee Grades  
 
-If employees are divided into grades with different salaries:
+If employees are divided into grades with different salaries:  
 
-### 1. Effective Salary Cost (Weighted Average)
-Example with 750 employees:
+**1. Effective Salary Cost (Weighted Average)**  
+Example with 750 employees:  
 - 500 × \$1500  
 - 100 × \$1700  
 - 75 × \$2000  
 - 75 × \$2500  
 
-\[
+$$
 \text{Effective Salary Cost} = 
 \frac{(500 \times 1500) + (100 \times 1700) + (75 \times 2000) + (75 \times 2500)}{750}
-\]
+$$  
 
-### 2. Separate Grade Modeling
-Introduce variables per grade (\( E_{i,1}, E_{i,2}, \dots \)) with respective salary costs.  
-This adds granularity but increases model complexity.
+**2. Separate Grade Modeling**  
+Introduce variables per grade ($E_{i,1}, E_{i,2}, \dots$) with respective salary costs.  
+This adds granularity but increases model complexity.  
 
 ---
 
