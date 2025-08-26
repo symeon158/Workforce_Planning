@@ -74,46 +74,46 @@ $$
 
 ---
 
-### Constraints  
+## Constraints
 
 **1. Workforce Balance**  
-First month:  
+First month:
+
 $$
 E_1 = \mathrm{initial\_employees} + H_1 - F_1
-$$  
+$$
 
-Subsequent months ($ i \geq 2 $):  
+Subsequent months (\( i \ge 2 \)):
+
 $$
 E_i = E_{i-1} + H_i - F_i
-$$  
-
----
-
-**2. Production Capacity**  
 $$
-E_i \times \mathrm{working\_hours} + O_i + U_i \geq \mathrm{demand}_i \times \mathrm{service\_rate}
-$$  
 
----
 
-**3. Overtime Limit**  
+**2. Production Capacity**
+
 $$
-O_i \leq E_i \times \mathrm{overtime\_rate}
-$$  
+E_i \cdot \mathrm{working\_hours} + O_i + U_i \ge \mathrm{demand}_i \cdot \mathrm{service\_rate}
+$$
 
----
 
-**4. Budget Constraint**  
+**3. Overtime Limit**
+
+$$
+O_i \le E_i \cdot \mathrm{overtime\_rate}
+$$
+
+
+**4. Budget Constraint**
+
 $$
 \sum_{i=1}^{N} \Big(
 \mathrm{hiring\_cost} \cdot H_i +
 \mathrm{firing\_cost} \cdot F_i +
 \mathrm{salary\_cost} \cdot E_i +
 \mathrm{overtime\_cost} \cdot O_i
-\Big) \leq \mathrm{Budget}
-$$  
-
----
+\Big) \le \mathrm{Budget}
+$$
 
 ## Handling Employee Grades  
 
