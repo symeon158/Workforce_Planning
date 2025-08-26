@@ -47,15 +47,17 @@ Results are displayed in an interactive dashboard using Plotly, including:
 The core of this project is a **Linear Programming (LP)** model that minimizes the total cost of workforce management over a planning horizon (measured in months).  
 The model considers hiring, firing, salary, overtime, and penalties for unmet demand, while ensuring that production capacity meets demand and costs remain within budget.
 
+---
+
 ### Decision Variables
 
-For each month \( i \) (\( i = 1, 2, \dots, N \)):
+For each month $i$ ($i = 1, 2, \dots, N$):
 
-- $H_i$: Number of employees hired in month $i$.
-- $F_i$: Number of employees fired in month $i$.
-- $E_i$: Total number of employees at the end of month $i$.
-- $O_i$: Total overtime hours worked in month $i$.
-- $U_i$: Unmet demand (in hours) in month $i$ that incurs a penalty. 
+- $H_i$: Number of employees hired in month $i$.  
+- $F_i$: Number of employees fired in month $i$.  
+- $E_i$: Total number of employees at the end of month $i$.  
+- $O_i$: Total overtime hours worked in month $i$.  
+- $U_i$: Unmet demand (in hours) in month $i$ that incurs a penalty.  
 
 ---
 
@@ -74,7 +76,7 @@ $$
 
 ---
 
-## Constraints
+### Constraints  
 
 **1. Workforce Balance**  
 First month:
@@ -83,26 +85,29 @@ $$
 E_1 = \mathrm{initial\_employees} + H_1 - F_1
 $$
 
-Subsequent months (\( i \ge 2 \)):
+Subsequent months ($i \geq 2$):
 
 $$
 E_i = E_{i-1} + H_i - F_i
 $$
 
+---
 
 **2. Production Capacity**
 
 $$
-E_i \cdot \mathrm{working\_hours} + O_i + U_i \ge \mathrm{demand}_i \cdot \mathrm{service\_rate}
+E_i \cdot \mathrm{working\_hours} + O_i + U_i \geq \mathrm{demand}_i \cdot \mathrm{service\_rate}
 $$
 
+---
 
 **3. Overtime Limit**
 
 $$
-O_i \le E_i \cdot \mathrm{overtime\_rate}
+O_i \leq E_i \cdot \mathrm{overtime\_rate}
 $$
 
+---
 
 **4. Budget Constraint**
 
@@ -112,7 +117,7 @@ $$
 \mathrm{firing\_cost} \cdot F_i +
 \mathrm{salary\_cost} \cdot E_i +
 \mathrm{overtime\_cost} \cdot O_i
-\Big) \le \mathrm{Budget}
+\Big) \leq \mathrm{Budget}
 $$
 
 ---
