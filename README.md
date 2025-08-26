@@ -49,8 +49,6 @@ The model considers hiring, firing, salary, overtime, and penalties for unmet de
 
 ### Decision Variables
 
-### Decision Variables
-
 For each month \( i \) (\( i = 1, 2, \dots, N \)):
 
 - \( H_i \): Number of employees hired in month \( i \).  
@@ -59,6 +57,7 @@ For each month \( i \) (\( i = 1, 2, \dots, N \)):
 - \( O_i \): Total overtime hours worked in month \( i \).  
 - \( U_i \): Unmet demand (in hours) in month \( i \) that incurs a penalty.  
 
+---
 
 ### Objective Function
 Minimize the total cost:
@@ -115,6 +114,8 @@ $$
 \mathrm{overtime\_cost} \cdot O_i
 \Big) \le \mathrm{Budget}
 $$
+
+---
 
 ## Handling Employee Grades  
 
