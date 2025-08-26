@@ -63,12 +63,12 @@ For each month \( i \) (\( i = 1, 2, \dots, N \)):
 Minimize the total cost:
 
 $$
-Z = \sum_{i=1}^{N} \Big( 
-\text{hiring\_cost} \cdot H_i +
-\text{firing\_cost} \cdot F_i +
-\text{salary\_cost} \cdot E_i +
-\text{overtime\_cost} \cdot O_i +
-\text{penalty\_cost} \cdot U_i
+Z = \sum_{i=1}^{N} \Big(
+\mathrm{hiring\_cost} \cdot H_i +
+\mathrm{firing\_cost} \cdot F_i +
+\mathrm{salary\_cost} \cdot E_i +
+\mathrm{overtime\_cost} \cdot O_i +
+\mathrm{penalty\_cost} \cdot U_i
 \Big)
 $$
 
@@ -79,38 +79,38 @@ $$
 **1. Workforce Balance**  
 First month:  
 $$
-E_1 = \text{initial\_employees} + H_1 - F_1
-$$
+E_1 = \mathrm{initial\_employees} + H_1 - F_1
+$$  
 
 Subsequent months ($ i \geq 2 $):  
 $$
 E_i = E_{i-1} + H_i - F_i
-$$
+$$  
 
 ---
 
 **2. Production Capacity**  
 $$
-E_i \times \text{working\_hours} + O_i + U_i \geq \text{demand}_i \times \text{service\_rate}
+E_i \times \mathrm{working\_hours} + O_i + U_i \geq \mathrm{demand}_i \times \mathrm{service\_rate}
 $$  
 
 ---
 
 **3. Overtime Limit**  
 $$
-O_i \leq E_i \times \text{overtime\_rate}
+O_i \leq E_i \times \mathrm{overtime\_rate}
 $$  
 
 ---
 
 **4. Budget Constraint**  
 $$
-\sum_{i=1}^{N} 
-\Big( \text{hiring\_cost} \cdot H_i +
-       \text{firing\_cost} \cdot F_i +
-       \text{salary\_cost} \cdot E_i +
-       \text{overtime\_cost} \cdot O_i
-\Big) \leq \text{Budget}
+\sum_{i=1}^{N} \Big(
+\mathrm{hiring\_cost} \cdot H_i +
+\mathrm{firing\_cost} \cdot F_i +
+\mathrm{salary\_cost} \cdot E_i +
+\mathrm{overtime\_cost} \cdot O_i
+\Big) \leq \mathrm{Budget}
 $$  
 
 ---
@@ -127,7 +127,7 @@ Example with 750 employees:
 - 75 × \$2500  
 
 $$
-\text{Effective Salary Cost} = 
+\mathrm{Effective\ Salary\ Cost} =
 \frac{(500 \times 1500) + (100 \times 1700) + (75 \times 2000) + (75 \times 2500)}{750}
 $$  
 
