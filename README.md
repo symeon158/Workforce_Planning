@@ -51,11 +51,11 @@ The model considers hiring, firing, salary, overtime, and penalties for unmet de
 
 For each month \( i \) (\( i = 1, 2, \dots, N \)):
 
-- \( H_i \): Number of employees hired in month \( i \).  
-- \( F_i \): Number of employees fired in month \( i \).  
-- \( E_i \): Total number of employees at the end of month \( i \).  
-- \( O_i \): Total overtime hours worked in month \( i \).  
-- \( U_i \): Unmet demand (in hours) in month \( i \) that incurs a penalty.  
+- $H_i$: Number of employees hired in month $i$.
+- $F_i$: Number of employees fired in month $i$.
+- $E_i$: Total number of employees at the end of month $i$.
+- $O_i$: Total overtime hours worked in month $i$.
+- $U_i$: Unmet demand (in hours) in month $i$ that incurs a penalty. 
 
 ---
 
