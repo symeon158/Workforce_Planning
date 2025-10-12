@@ -166,12 +166,35 @@ st.sidebar.markdown(f"**Budget:** {budget:,.0f}")
 service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
 
 # Demand input for each month (in hours)
+# ----------------- Demand defaults with state -----------------
 st.sidebar.header("Monthly Demand (hours)")
+
+# Compute capacity-based default from current inputs
+capacity_default = int(total_initial * working_hours)
+
+# Initialize demand in session state (first run only)
+if "demand" not in st.session_state or len(st.session_state["demand"]) != int(months):
+    st.session_state["demand"] = [capacity_default for _ in range(int(months))]
+
+# Optional button to recompute defaults after changing grades/working hours
+if st.sidebar.button("Recalculate Demand Defaults from Capacity"):
+    st.session_state["demand"] = [int(total_initial * working_hours) for _ in range(int(months))]
+
+# Render the demand inputs using the state values
 demand = []
 for i in range(int(months)):
-    default_demand = initial_employees * 166  # For example, a base calculation
-    d = st.sidebar.number_input(f"Demand for Month {i+1}", min_value=0, value=default_demand, step=100, key=f"demand_{i}")
+    d = st.sidebar.number_input(
+        f"Demand for Month {i+1}",
+        min_value=0,
+        value=int(st.session_state["demand"][i]),
+        step=100,
+        key=f"demand_{i}"
+    )
     demand.append(d)
+
+# Keep state in sync with any manual edits
+st.session_state["demand"] = demand
+
 
 # ----------------- Solve and Display Results -----------------
 if st.button("Optimize"):
@@ -260,3 +283,4 @@ if st.button("Optimize"):
    
     else:
         st.error(f"Status: {results['Status']}")
+
