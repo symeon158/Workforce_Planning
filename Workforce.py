@@ -162,38 +162,60 @@ if use_auto_budget:
 else:
     budget = st.sidebar.number_input("Manual Budget", min_value=0, value=int(default_budget), step=10000)
 
-st.sidebar.markdown(f"**Budget:** {budget:,.0f}")
-service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
-
-# Demand input for each month (in hours)
-# ----------------- Demand defaults with state -----------------
+# ----------------- Demand input with robust defaults -----------------
 st.sidebar.header("Monthly Demand (hours)")
 
-# Compute capacity-based default from current inputs
+# Capacity default based on current inputs
 capacity_default = int(total_initial * working_hours)
 
-# Initialize demand in session state (first run only)
-if "demand" not in st.session_state or len(st.session_state["demand"]) != int(months):
-    st.session_state["demand"] = [capacity_default for _ in range(int(months))]
+# Option: auto-update demands when inputs that affect capacity change
+auto_update_demands = st.sidebar.checkbox("Auto-update demands when capacity changes", value=True)
 
-# Optional button to recompute defaults after changing grades/working hours
-if st.sidebar.button("Recalculate Demand Defaults from Capacity"):
-    st.session_state["demand"] = [int(total_initial * working_hours) for _ in range(int(months))]
+# Track a "signature" of inputs that should trigger recompute
+current_sig = (int(months), int(total_initial), int(working_hours))
+if "demand_sig" not in st.session_state:
+    st.session_state["demand_sig"] = None
 
-# Render the demand inputs using the state values
+# Initialize per-month demand keys before rendering widgets
+# Also handle month count changes (add/remove keys)
+existing_keys = [k for k in st.session_state.keys() if k.startswith("demand_")]
+existing_idx = sorted(int(k.split("_")[1]) for k in existing_keys if k.split("_")[1].isdigit())
+existing_n = len(existing_idx)
+
+# If months decreased, drop extra keys
+for i in range(int(months), existing_n):
+    key_to_drop = f"demand_{i}"
+    if key_to_drop in st.session_state:
+        del st.session_state[key_to_drop]
+
+# If first time OR signature changed and auto-update is on, (re)seed defaults
+if ("demand_initialized" not in st.session_state) or (auto_update_demands and st.session_state["demand_sig"] != current_sig):
+    for i in range(int(months)):
+        key = f"demand_{i}"
+        st.session_state[key] = capacity_default
+    st.session_state["demand_initialized"] = True
+    st.session_state["demand_sig"] = current_sig
+
+# Manual reset button
+if st.sidebar.button("Reset all monthly demands to capacity"):
+    for i in range(int(months)):
+        st.session_state[f"demand_{i}"] = int(total_initial * working_hours)
+
+# Render widgets — value comes from state set above
 demand = []
 for i in range(int(months)):
+    key = f"demand_{i}"
+    # Ensure key exists even if user just increased months
+    if key not in st.session_state:
+        st.session_state[key] = capacity_default
     d = st.sidebar.number_input(
         f"Demand for Month {i+1}",
         min_value=0,
-        value=int(st.session_state["demand"][i]),
+        value=int(st.session_state[key]),  # ignored after first render unless we set state first (we did)
         step=100,
-        key=f"demand_{i}"
+        key=key
     )
     demand.append(d)
-
-# Keep state in sync with any manual edits
-st.session_state["demand"] = demand
 
 
 # ----------------- Solve and Display Results -----------------
@@ -283,4 +305,5 @@ if st.button("Optimize"):
    
     else:
         st.error(f"Status: {results['Status']}")
+
 
