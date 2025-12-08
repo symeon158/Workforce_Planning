@@ -3,6 +3,202 @@ from pulp import LpProblem, LpMinimize, LpVariable, lpSum, LpStatus, PULP_CBC_CM
 import pandas as pd
 import plotly.graph_objects as go
 
+
+def render_advanced_header(total_initial, effective_salary_cost, budget):
+    # Safe fallbacks
+    total_initial = total_initial or 0
+    effective_salary_cost = effective_salary_cost or 0
+    budget = budget or 0
+
+    header_html = """
+    <style>
+        :root {{
+            --primary: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --accent: #22c55e;
+            --bg-dark: #0f172a;
+            --bg-light: #f9fafb;
+            --text-main: #f9fafb;
+            --text-muted: #cbd5f5;
+        }}
+
+        .wf-header-wrapper {{
+            margin: -3rem -3rem 1.5rem -3rem;  /* stretch to edges */
+            background: radial-gradient(circle at top left, #1d4ed8, #020617);
+            color: var(--text-main);
+            padding: 1.8rem 3rem 1.6rem 3rem;
+            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.55);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+        }}
+
+        .wf-header-grid {{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }}
+
+        .wf-title-block {{
+            flex: 2 1 260px;
+        }}
+
+        .wf-title {{
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            margin: 0 0 0.4rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }}
+
+        .wf-title-pill {{
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            padding: 0.18rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(248, 250, 252, 0.55);
+            background: rgba(15, 23, 42, 0.35);
+        }}
+
+        .wf-subtitle {{
+            font-size: 0.92rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            max-width: 520px;
+            line-height: 1.4;
+        }}
+
+        .wf-badges {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }}
+
+        .wf-badge {{
+            font-size: 0.7rem;
+            padding: 0.22rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: rgba(15, 23, 42, 0.65);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }}
+
+        .wf-badge-dot {{
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+        }}
+
+        .wf-kpi-block {{
+            flex: 1.4 1 260px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }}
+
+        .wf-kpi-card {{
+            min-width: 130px;
+            padding: 0.65rem 0.75rem;
+            border-radius: 0.9rem;
+            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.78));
+            border: 1px solid rgba(148, 163, 184, 0.65);
+        }}
+
+        .wf-kpi-label {{
+            font-size: 0.70rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--text-muted);
+            margin-bottom: 0.15rem;
+        }}
+
+        .wf-kpi-value {{
+            font-size: 1.08rem;
+            font-weight: 600;
+        }}
+
+        .wf-kpi-caption {{
+            font-size: 0.70rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }}
+
+        @media (max-width: 768px) {{
+            .wf-header-wrapper {{
+                margin: -2rem -1.5rem 1.2rem -1.5rem;
+                padding: 1.5rem 1.5rem 1.3rem 1.5rem;
+            }}
+            .wf-kpi-block {{
+                justify-content: flex-start;
+            }}
+        }}
+    </style>
+
+    <div class="wf-header-wrapper">
+        <div class="wf-header-grid">
+            <!-- LEFT: TITLE & CONTEXT -->
+            <div class="wf-title-block">
+                <div class="wf-title">
+                    <span>Workforce Planning Optimization</span>
+                    <span class="wf-title-pill">HR · Operations · Finance</span>
+                </div>
+                <div class="wf-subtitle">
+                    Interactive PuLP-based optimization for workforce, overtime and budget allocation — 
+                    tailored for monthly demand, service level targets and HR grade structure.
+                </div>
+                <div class="wf-badges">
+                    <span class="wf-badge">
+                        <span class="wf-badge-dot"></span>
+                        Live optimization
+                    </span>
+                    <span class="wf-badge">PuLP · Linear Programming</span>
+                    <span class="wf-badge">Streamlit · Plotly</span>
+                    <span class="wf-badge">Service rate control</span>
+                </div>
+            </div>
+
+            <!-- RIGHT: LIVE KPIs -->
+            <div class="wf-kpi-block">
+                <div class="wf-kpi-card">
+                    <div class="wf-kpi-label">Initial headcount</div>
+                    <div class="wf-kpi-value">{initial_employees}</div>
+                    <div class="wf-kpi-caption">Total employees across all grades</div>
+                </div>
+                <div class="wf-kpi-card">
+                    <div class="wf-kpi-label">Effective monthly salary</div>
+                    <div class="wf-kpi-value">{eff_salary}</div>
+                    <div class="wf-kpi-caption">Weighted average per FTE</div>
+                </div>
+                <div class="wf-kpi-card">
+                    <div class="wf-kpi-label">Budget envelope</div>
+                    <div class="wf-kpi-value">{budget_val}</div>
+                    <div class="wf-kpi-caption">Total allowed cost (excl. penalties)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """
+
+    # Format numbers nicely (no decimals for headcount/budget)
+    header_html = header_html.format(
+        initial_employees=f"{int(total_initial):,}",
+        eff_salary=f"{effective_salary_cost:,.0f}",
+        budget_val=f"{int(budget):,}"
+    )
+
+    st.markdown(header_html, unsafe_allow_html=True)
+
+
 # ===================== OPTIMIZER =====================
 def solve_workforce_planning(
     months, hiring_cost, firing_cost, effective_salary_cost, penalty_cost,
@@ -333,4 +529,5 @@ if st.button("Optimize"):
     fig4 = go.Figure(data=[go.Pie(labels=labels, values=costs, textinfo='percent+label')])
     fig4.update_layout(title='Cost Distribution')
     st.plotly_chart(fig4, use_container_width=True)
+
 
