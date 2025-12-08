@@ -11,146 +11,143 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
     effective_salary_cost = effective_salary_cost or 0
     budget = budget or 0
 
-    # 1) CSS ONLY
-    css = """
-    <style>
-        :root {
-            --primary: #0d6efd;
-            --primary-dark: #0b5ed7;
-            --accent: #22c55e;
-            --bg-dark: #0f172a;
-            --bg-light: #f9fafb;
-            --text-main: #f9fafb;
-            --text-muted: #cbd5f5;
-        }
+    # 1) CSS – ΠΡΟΣΟΧΗ: <style> στην αρχή της γραμμής
+    css = """<style>
+:root {
+  --primary: #0d6efd;
+  --primary-dark: #0b5ed7;
+  --accent: #22c55e;
+  --bg-dark: #0f172a;
+  --bg-light: #f9fafb;
+  --text-main: #f9fafb;
+  --text-muted: #cbd5f5;
+}
 
-        .wf-header-wrapper {
-            margin: -3rem -3rem 1.5rem -3rem;
-            background: radial-gradient(circle at top left, #1d4ed8, #020617);
-            color: var(--text-main);
-            padding: 1.8rem 3rem 1.6rem 3rem;
-            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.55);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
-        }
+.wf-header-wrapper {
+  margin: -3rem -3rem 1.5rem -3rem;
+  background: radial-gradient(circle at top left, #1d4ed8, #020617);
+  color: var(--text-main);
+  padding: 1.8rem 3rem 1.6rem 3rem;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.55);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+}
 
-        .wf-header-grid {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-        }
+.wf-header-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
 
-        .wf-title-block {
-            flex: 2 1 260px;
-        }
+.wf-title-block {
+  flex: 2 1 260px;
+}
 
-        .wf-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            margin: 0 0 0.4rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
+.wf-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.4rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-        .wf-title-pill {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            padding: 0.18rem 0.6rem;
-            border-radius: 999px;
-            border: 1px solid rgba(248, 250, 252, 0.55);
-            background: rgba(15, 23, 42, 0.35);
-        }
+.wf-title-pill {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 250, 252, 0.55);
+  background: rgba(15, 23, 42, 0.35);
+}
 
-        .wf-subtitle {
-            font-size: 0.92rem;
-            font-weight: 400;
-            color: var(--text-muted);
-            max-width: 520px;
-            line-height: 1.4;
-        }
+.wf-subtitle {
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.4;
+}
 
-        .wf-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 0.5rem;
-        }
+.wf-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
 
-        .wf-badge {
-            font-size: 0.7rem;
-            padding: 0.22rem 0.65rem;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.7);
-            background: rgba(15, 23, 42, 0.65);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            white-space: nowrap;
-        }
+.wf-badge {
+  font-size: 0.7rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.65);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
 
-        .wf-badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 999px;
-            background: #22c55e;
-            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
-        }
+.wf-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+}
 
-        .wf-kpi-block {
-            flex: 1.4 1 260px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
+.wf-kpi-block {
+  flex: 1.4 1 260px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
 
-        .wf-kpi-card {
-            min-width: 130px;
-            padding: 0.65rem 0.75rem;
-            border-radius: 0.9rem;
-            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.78));
-            border: 1px solid rgba(148, 163, 184, 0.65);
-        }
+.wf-kpi-card {
+  min-width: 130px;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.9rem;
+  background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.78));
+  border: 1px solid rgba(148, 163, 184, 0.65);
+}
 
-        .wf-kpi-label {
-            font-size: 0.70rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: var(--text-muted);
-            margin-bottom: 0.15rem;
-        }
+.wf-kpi-label {
+  font-size: 0.70rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+}
 
-        .wf-kpi-value {
-            font-size: 1.08rem;
-            font-weight: 600;
-        }
+.wf-kpi-value {
+  font-size: 1.08rem;
+  font-weight: 600;
+}
 
-        .wf-kpi-caption {
-            font-size: 0.70rem;
-            color: var(--text-muted);
-            margin-top: 0.1rem;
-        }
+.wf-kpi-caption {
+  font-size: 0.70rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
 
-        @media (max-width: 768px) {
-            .wf-header-wrapper {
-                margin: -2rem -1.5rem 1.2rem -1.5rem;
-                padding: 1.5rem 1.5rem 1.3rem 1.5rem;
-            }
-            .wf-kpi-block {
-                justify-content: flex-start;
-            }
-        }
-    </style>
-    """
+@media (max-width: 768px) {
+  .wf-header-wrapper {
+    margin: -2rem -1.5rem 1.2rem -1.5rem;
+    padding: 1.5rem 1.5rem 1.3rem 1.5rem;
+  }
+  .wf-kpi-block {
+    justify-content: flex-start;
+  }
+}
+</style>"""
     st.markdown(css, unsafe_allow_html=True)
 
-    # 2) HTML ONLY (f-string)
-    header_html = f"""
-<div class="wf-header-wrapper">
+    # 2) HTML – επίσης χωρίς κενά πριν από το <div>
+    header_html = f"""<div class="wf-header-wrapper">
   <div class="wf-header-grid">
 
     <div class="wf-title-block">
@@ -192,8 +189,7 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
     </div>
 
   </div>
-</div>
-"""
+</div>"""
     st.markdown(header_html, unsafe_allow_html=True)
 
 
@@ -228,7 +224,7 @@ def solve_workforce_planning(
 
         problem += E[i] * working_hours + O[i] + U[i] >= demand[i] * service_rate, f"Demand_Cover_{i}"
         problem += H[i] <= maxh, f"Hiring_Capacity_{i}"
-        problem += F[i] <= maxf, f"Firing_Cacapacity_{i}"
+        problem += F[i] <= maxf, f"Firing_Capacity_{i}"
         problem += O[i] <= E[i] * overtime_rate, f"Overtime_Limit_{i}"
         problem += U[i] >= demand[i] - (E[i] * working_hours + O[i]), f"Unmet_Demand_{i}"
 
