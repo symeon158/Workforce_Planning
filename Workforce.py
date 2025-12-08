@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit.components.v1 as components   # <<< ΝΕΟ
 
+st.set_page_config(layout="wide")
 
 
 # ===================== ADVANCED HEADER =====================
@@ -518,5 +519,6 @@ if st.button("Optimize"):
     fig4 = go.Figure(data=[go.Pie(labels=labels, values=costs, textinfo='percent+label')])
     fig4.update_layout(title='Cost Distribution')
     st.plotly_chart(fig4, use_container_width=True)
+
 
 
