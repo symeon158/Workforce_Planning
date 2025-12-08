@@ -13,7 +13,7 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
 
     header_html = """
     <style>
-        :root {{
+        :root {
             --primary: #0d6efd;
             --primary-dark: #0b5ed7;
             --accent: #22c55e;
@@ -21,30 +21,30 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
             --bg-light: #f9fafb;
             --text-main: #f9fafb;
             --text-muted: #cbd5f5;
-        }}
+        }
 
-        .wf-header-wrapper {{
+        .wf-header-wrapper {
             margin: -3rem -3rem 1.5rem -3rem;  /* stretch to edges */
             background: radial-gradient(circle at top left, #1d4ed8, #020617);
             color: var(--text-main);
             padding: 1.8rem 3rem 1.6rem 3rem;
             box-shadow: 0 14px 40px rgba(15, 23, 42, 0.55);
             border-bottom: 1px solid rgba(148, 163, 184, 0.35);
-        }}
+        }
 
-        .wf-header-grid {{
+        .wf-header-grid {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 1.5rem;
-        }}
+        }
 
-        .wf-title-block {{
+        .wf-title-block {
             flex: 2 1 260px;
-        }}
+        }
 
-        .wf-title {{
+        .wf-title {
             font-size: 1.8rem;
             font-weight: 700;
             letter-spacing: 0.04em;
@@ -52,9 +52,9 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
             display: flex;
             align-items: center;
             gap: 0.6rem;
-        }}
+        }
 
-        .wf-title-pill {{
+        .wf-title-pill {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.16em;
@@ -62,24 +62,24 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
             border-radius: 999px;
             border: 1px solid rgba(248, 250, 252, 0.55);
             background: rgba(15, 23, 42, 0.35);
-        }}
+        }
 
-        .wf-subtitle {{
+        .wf-subtitle {
             font-size: 0.92rem;
             font-weight: 400;
             color: var(--text-muted);
             max-width: 520px;
             line-height: 1.4;
-        }}
+        }
 
-        .wf-badges {{
+        .wf-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 0.4rem;
             margin-top: 0.5rem;
-        }}
+        }
 
-        .wf-badge {{
+        .wf-badge {
             font-size: 0.7rem;
             padding: 0.22rem 0.65rem;
             border-radius: 999px;
@@ -89,72 +89,72 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
             align-items: center;
             gap: 0.4rem;
             white-space: nowrap;
-        }}
+        }
 
-        .wf-badge-dot {{
+        .wf-badge-dot {
             width: 6px;
             height: 6px;
             border-radius: 999px;
             background: #22c55e;
             box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
-        }}
+        }
 
-        .wf-kpi-block {{
+        .wf-kpi-block {
             flex: 1.4 1 260px;
             display: flex;
             justify-content: flex-end;
             gap: 0.75rem;
             flex-wrap: wrap;
-        }}
+        }
 
-        .wf-kpi-card {{
+        .wf-kpi-card {
             min-width: 130px;
             padding: 0.65rem 0.75rem;
             border-radius: 0.9rem;
             background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.78));
             border: 1px solid rgba(148, 163, 184, 0.65);
-        }}
+        }
 
-        .wf-kpi-label {{
+        .wf-kpi-label {
             font-size: 0.70rem;
             text-transform: uppercase;
             letter-spacing: 0.16em;
             color: var(--text-muted);
             margin-bottom: 0.15rem;
-        }}
+        }
 
-        .wf-kpi-value {{
+        .wf-kpi-value {
             font-size: 1.08rem;
             font-weight: 600;
-        }}
+        }
 
-        .wf-kpi-caption {{
+        .wf-kpi-caption {
             font-size: 0.70rem;
             color: var(--text-muted);
             margin-top: 0.1rem;
-        }}
+        }
 
-        @media (max-width: 768px) {{
-            .wf-header-wrapper {{
+        @media (max-width: 768px) {
+            .wf-header-wrapper {
                 margin: -2rem -1.5rem 1.2rem -1.5rem;
                 padding: 1.5rem 1.5rem 1.3rem 1.5rem;
-            }}
-            .wf-kpi-block {{
+            }
+            .wf-kpi-block {
                 justify-content: flex-start;
-            }}
-        }}
+            }
+        }
     </style>
 
     <div class="wf-header-wrapper">
         <div class="wf-header-grid">
-            <!-- LEFT: TITLE & CONTEXT -->
+
             <div class="wf-title-block">
                 <div class="wf-title">
                     <span>Workforce Planning Optimization</span>
                     <span class="wf-title-pill">HR · Operations · Finance</span>
                 </div>
                 <div class="wf-subtitle">
-                    Interactive PuLP-based optimization for workforce, overtime and budget allocation — 
+                    Interactive PuLP-based optimization for workforce, overtime and budget allocation —
                     tailored for monthly demand, service level targets and HR grade structure.
                 </div>
                 <div class="wf-badges">
@@ -168,7 +168,6 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
                 </div>
             </div>
 
-            <!-- RIGHT: LIVE KPIs -->
             <div class="wf-kpi-block">
                 <div class="wf-kpi-card">
                     <div class="wf-kpi-label">Initial headcount</div>
@@ -186,17 +185,16 @@ def render_advanced_header(total_initial, effective_salary_cost, budget):
                     <div class="wf-kpi-caption">Total allowed cost (excl. penalties)</div>
                 </div>
             </div>
+
         </div>
     </div>
     """
 
-    # Format numbers nicely (no decimals for headcount/budget)
     header_html = header_html.format(
         initial_employees=f"{int(total_initial):,}",
         eff_salary=f"{effective_salary_cost:,.0f}",
         budget_val=f"{int(budget):,}"
     )
-
     st.markdown(header_html, unsafe_allow_html=True)
 
 
@@ -206,19 +204,14 @@ def solve_workforce_planning(
     overtime_cost, initial_employees, maxh, maxf, overtime_rate,
     working_hours, demand, budget, service_rate
 ):
-    """
-    Solve the workforce planning optimization model using an effective salary cost.
-    """
     problem = LpProblem("Workforce_Planning", LpMinimize)
 
-    # Decision variables
     H = [LpVariable(f"H_{i}", lowBound=0, cat="Integer") for i in range(months)]
     F = [LpVariable(f"F_{i}", lowBound=0, cat="Integer") for i in range(months)]
     E = [LpVariable(f"E_{i}", lowBound=0, cat="Integer") for i in range(months)]
     O = [LpVariable(f"O_{i}", lowBound=0, cat="Integer") for i in range(months)]
     U = [LpVariable(f"U_{i}", lowBound=0, cat="Integer") for i in range(months)]
 
-    # Objective
     problem += lpSum(
         H[i] * hiring_cost
         + F[i] * firing_cost
@@ -228,42 +221,30 @@ def solve_workforce_planning(
         for i in range(months)
     ), "Total_Cost"
 
-    # Constraints
     for i in range(months):
-        # Workforce balance
         if i == 0:
             problem += E[i] == initial_employees + H[i] - F[i], f"Initial_Balance_{i}"
         else:
             problem += E[i] == E[i - 1] + H[i] - F[i], f"Balance_{i}"
 
-        # Capacity vs demand (service level applied on demand side)
         problem += E[i] * working_hours + O[i] + U[i] >= demand[i] * service_rate, f"Demand_Cover_{i}"
-
-        # Hiring/Firing capacity
         problem += H[i] <= maxh, f"Hiring_Capacity_{i}"
         problem += F[i] <= maxf, f"Firing_Capacity_{i}"
-
-        # Overtime limit per employee
         problem += O[i] <= E[i] * overtime_rate, f"Overtime_Limit_{i}"
-
-        # Unmet demand must cover any shortfall
         problem += U[i] >= demand[i] - (E[i] * working_hours + O[i]), f"Unmet_Demand_{i}"
 
-    # Budget (excluding penalty)
     total_cost_excl_penalty = lpSum(
         H[i] * hiring_cost + F[i] * firing_cost + E[i] * effective_salary_cost + O[i] * overtime_cost
         for i in range(months)
     )
     problem += total_cost_excl_penalty <= budget, "Budget_Constraint"
 
-    # Solve
     problem.solve(PULP_CBC_CMD(msg=True))
 
     def safe_value(var):
         v = var.value()
         return int(v) if v is not None else 0
 
-    # Remove penalty from reported "Total Cost" if you want only controllable costs
     objective_penalty = sum(safe_value(U[i]) * penalty_cost for i in range(months))
     total_cost_reported = (problem.objective.value() or 0) - objective_penalty
 
@@ -303,7 +284,6 @@ for i in range(int(num_grades)):
         salary = st.number_input(f"Salary for {grade_name}", min_value=0, value=0, key=f"grade_salary_{i}")
     grade_data.append((grade_name, count, salary))
 
-# Compute total initial employees & effective salary cost
 if grade_data:
     total_initial = int(sum(count for (_, count, _) in grade_data))
     effective_salary_cost = (
@@ -332,7 +312,6 @@ overtime_rate = st.sidebar.number_input("Overtime Hours per Employee", min_value
 working_hours = st.sidebar.number_input("Working Hours per Employee per Month", min_value=1, value=166)
 
 use_auto_budget = st.sidebar.checkbox("Auto-calculate Budget", value=True)
-# Compute default budget with current inputs
 default_budget = int(total_initial * effective_salary_cost * int(months) + 150_000)
 if use_auto_budget:
     budget = default_budget
@@ -343,25 +322,22 @@ st.sidebar.markdown(f"**Budget:** {int(budget):,.0f}")
 
 service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
 
-# ==== RENDER ADVANCED HEADER ====
+# ==== HEADER ====
 render_advanced_header(total_initial, effective_salary_cost, budget)
 
-# -------- Demand Inputs (robust defaults + state) --------
+# -------- Demand Inputs --------
 st.sidebar.header("Monthly Demand (hours)")
 
 M = int(months)
 WH = int(working_hours)
 capacity_default = int(total_initial * WH)
 
-# allow auto-update of defaults when key inputs change
 auto_update_demands = st.sidebar.checkbox("Auto-update demands when capacity changes", value=True)
 
-# a signature that triggers re-seed when changes
 current_sig = (M, int(total_initial), WH)
 if "demand_sig" not in st.session_state:
     st.session_state["demand_sig"] = None
 
-# ensure demand_* keys match current months (drop excess)
 existing_keys = [k for k in st.session_state.keys() if k.startswith("demand_")]
 existing_idx = sorted([int(k.split("_")[1]) for k in existing_keys if k.split("_")[1].isdigit()])
 for i in existing_idx:
@@ -370,19 +346,16 @@ for i in existing_idx:
         if key_to_drop in st.session_state:
             del st.session_state[key_to_drop]
 
-# seed (or reseed) defaults
 if ("demand_initialized" not in st.session_state) or (auto_update_demands and st.session_state["demand_sig"] != current_sig):
     for i in range(M):
         st.session_state[f"demand_{i}"] = capacity_default
     st.session_state["demand_initialized"] = True
     st.session_state["demand_sig"] = current_sig
 
-# manual reset
 if st.sidebar.button("Reset all monthly demands to capacity"):
     for i in range(M):
         st.session_state[f"demand_{i}"] = int(total_initial * WH)
 
-# render demand widgets (state-driven)
 demand = []
 for i in range(M):
     key = f"demand_{i}"
@@ -399,7 +372,6 @@ for i in range(M):
 
 # ===================== RUN =====================
 if st.button("Optimize"):
-    # ---- Guardrails before solve ----
     try:
         demand = [int(x) for x in demand]
     except Exception:
@@ -448,7 +420,6 @@ if st.button("Optimize"):
 
     st.write(f"Total Cost (excl. penalties): **{int(results['Total Cost']):,}**")
 
-    # Variance vs budget
     total_cost_value = results['Total Cost']
     variance = int(budget) - (int(total_cost_value) if total_cost_value is not None else 0)
     percentage_variance = (variance / int(budget) * 100) if int(budget) > 0 else 0.0
@@ -470,13 +441,10 @@ if st.button("Optimize"):
     </div>
     """, unsafe_allow_html=True)
 
-    # Table
     df = pd.DataFrame(results["Details"])
     st.write("Results in a Tabular Form:")
     st.dataframe(df, use_container_width=True)
 
-    # Charts
-    # 1) Hired vs Fired
     fig1 = go.Figure()
     fig1.add_trace(go.Bar(x=df['Month'], y=df['Hired'], name='Hired'))
     fig1.add_trace(go.Bar(x=df['Month'], y=df['Fired'], name='Fired'))
@@ -488,7 +456,6 @@ if st.button("Optimize"):
     )
     st.plotly_chart(fig1, use_container_width=True)
 
-    # 2) Overtime vs Unmet Demand
     fig2 = go.Figure()
     fig2.add_trace(go.Bar(x=df['Month'], y=df['Overtime (hours)'], name='Overtime'))
     fig2.add_trace(go.Bar(x=df['Month'], y=df['Unmet Demand (hours)'], name='Unmet Demand'))
@@ -500,7 +467,6 @@ if st.button("Optimize"):
     )
     st.plotly_chart(fig2, use_container_width=True)
 
-    # 3) Total Workforce Capacity vs Demand
     df['Total Workforce Capacity'] = df['Employees'] * WH + df['Overtime (hours)']
     fig3 = go.Figure()
     fig3.add_trace(go.Scatter(
@@ -523,7 +489,6 @@ if st.button("Optimize"):
     )
     st.plotly_chart(fig3, use_container_width=True)
 
-    # 4) Cost Distribution
     hiring_total_cost = int(df['Hired'].sum()) * int(hiring_cost)
     firing_total_cost = int(df['Fired'].sum()) * int(firing_cost)
     salary_total_cost = int(df['Employees'].sum()) * float(effective_salary_cost)
