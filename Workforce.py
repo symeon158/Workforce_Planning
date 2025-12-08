@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
+# ===================== ADVANCED HEADER =====================
 def render_advanced_header(total_initial, effective_salary_cost, budget):
     # Safe fallbacks
     total_initial = total_initial or 0
@@ -287,20 +288,6 @@ def solve_workforce_planning(
 
 
 # ===================== UI =====================
-st.markdown("""
-    <style>
-        .clean-title {
-            font-size: 36px;
-            font-weight: 600;
-            color: #1f2937;
-            text-align: center;
-            padding: 20px 0 10px 0;
-            border-bottom: 2px solid #0d6efd;
-            margin-bottom: 30px;
-        }
-    </style>
-    <div class="clean-title">Workforce Planning Optimization Dashboard</div>
-""", unsafe_allow_html=True)
 
 # -------- Grade Inputs --------
 st.sidebar.header("Grade Settings")
@@ -356,11 +343,11 @@ st.sidebar.markdown(f"**Budget:** {int(budget):,.0f}")
 
 service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, value=0.95)
 
-# -------- Demand Inputs (robust defaults + state) --------
-st.sidebar.header("Monthly Demand (hours)")
 # ==== RENDER ADVANCED HEADER ====
 render_advanced_header(total_initial, effective_salary_cost, budget)
 
+# -------- Demand Inputs (robust defaults + state) --------
+st.sidebar.header("Monthly Demand (hours)")
 
 M = int(months)
 WH = int(working_hours)
@@ -377,10 +364,11 @@ if "demand_sig" not in st.session_state:
 # ensure demand_* keys match current months (drop excess)
 existing_keys = [k for k in st.session_state.keys() if k.startswith("demand_")]
 existing_idx = sorted([int(k.split("_")[1]) for k in existing_keys if k.split("_")[1].isdigit()])
-for i in range(M, len(existing_idx)):
-    key_to_drop = f"demand_{i}"
-    if key_to_drop in st.session_state:
-        del st.session_state[key_to_drop]
+for i in existing_idx:
+    if i >= M:
+        key_to_drop = f"demand_{i}"
+        if key_to_drop in st.session_state:
+            del st.session_state[key_to_drop]
 
 # seed (or reseed) defaults
 if ("demand_initialized" not in st.session_state) or (auto_update_demands and st.session_state["demand_sig"] != current_sig):
@@ -394,14 +382,13 @@ if st.sidebar.button("Reset all monthly demands to capacity"):
     for i in range(M):
         st.session_state[f"demand_{i}"] = int(total_initial * WH)
 
-
+# render demand widgets (state-driven)
 demand = []
 for i in range(M):
     key = f"demand_{i}"
     if key not in st.session_state:
         st.session_state[key] = capacity_default
 
-    # Let Streamlit use st.session_state[key] as the initial value
     d = st.sidebar.number_input(
         f"Demand for Month {i+1}",
         min_value=0,
@@ -409,7 +396,6 @@ for i in range(M):
         key=key
     )
     demand.append(int(d))
-
 
 # ===================== RUN =====================
 if st.button("Optimize"):
@@ -494,28 +480,47 @@ if st.button("Optimize"):
     fig1 = go.Figure()
     fig1.add_trace(go.Bar(x=df['Month'], y=df['Hired'], name='Hired'))
     fig1.add_trace(go.Bar(x=df['Month'], y=df['Fired'], name='Fired'))
-    fig1.update_layout(barmode='group', xaxis_title='Month', yaxis_title='Count',
-                       title='Hired vs Fired Employees per Month')
+    fig1.update_layout(
+        barmode='group',
+        xaxis_title='Month',
+        yaxis_title='Count',
+        title='Hired vs Fired Employees per Month'
+    )
     st.plotly_chart(fig1, use_container_width=True)
 
     # 2) Overtime vs Unmet Demand
     fig2 = go.Figure()
     fig2.add_trace(go.Bar(x=df['Month'], y=df['Overtime (hours)'], name='Overtime'))
     fig2.add_trace(go.Bar(x=df['Month'], y=df['Unmet Demand (hours)'], name='Unmet Demand'))
-    fig2.update_layout(barmode='group', xaxis_title='Month', yaxis_title='Hours',
-                       title='Overtime vs Unmet Demand per Month')
+    fig2.update_layout(
+        barmode='group',
+        xaxis_title='Month',
+        yaxis_title='Hours',
+        title='Overtime vs Unmet Demand per Month'
+    )
     st.plotly_chart(fig2, use_container_width=True)
 
     # 3) Total Workforce Capacity vs Demand
     df['Total Workforce Capacity'] = df['Employees'] * WH + df['Overtime (hours)']
     fig3 = go.Figure()
-    fig3.add_trace(go.Scatter(x=df['Month'], y=df['Total Workforce Capacity'], mode='lines+markers',
-                              name='Total Workforce Capacity'))
-    fig3.add_trace(go.Scatter(x=df['Month'], y=df['Demand (hours)'], mode='lines+markers',
-                              name='Demand'))
-    fig3.update_layout(xaxis_title='Month', yaxis_title='Hours',
-                       title='Total Workforce Capacity vs Demand',
-                       xaxis=dict(tickmode='linear', dtick=1))
+    fig3.add_trace(go.Scatter(
+        x=df['Month'],
+        y=df['Total Workforce Capacity'],
+        mode='lines+markers',
+        name='Total Workforce Capacity'
+    ))
+    fig3.add_trace(go.Scatter(
+        x=df['Month'],
+        y=df['Demand (hours)'],
+        mode='lines+markers',
+        name='Demand'
+    ))
+    fig3.update_layout(
+        xaxis_title='Month',
+        yaxis_title='Hours',
+        title='Total Workforce Capacity vs Demand',
+        xaxis=dict(tickmode='linear', dtick=1)
+    )
     st.plotly_chart(fig3, use_container_width=True)
 
     # 4) Cost Distribution
@@ -525,13 +530,15 @@ if st.button("Optimize"):
     overtime_total_cost = int(df['Overtime (hours)'].sum()) * int(overtime_cost)
     penalty_total_cost = int(df['Unmet Demand (hours)'].sum()) * int(penalty_cost)
 
-    costs = [hiring_total_cost, firing_total_cost, salary_total_cost,
-             overtime_total_cost, penalty_total_cost]
+    costs = [
+        hiring_total_cost,
+        firing_total_cost,
+        salary_total_cost,
+        overtime_total_cost,
+        penalty_total_cost
+    ]
     labels = ['Hiring Cost', 'Firing Cost', 'Salary Cost', 'Overtime Cost', 'Penalty Cost']
 
     fig4 = go.Figure(data=[go.Pie(labels=labels, values=costs, textinfo='percent+label')])
     fig4.update_layout(title='Cost Distribution')
     st.plotly_chart(fig4, use_container_width=True)
-
-
-
