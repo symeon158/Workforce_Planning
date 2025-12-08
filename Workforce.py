@@ -358,6 +358,9 @@ service_rate = st.sidebar.slider("Service Rate", min_value=0.0, max_value=1.0, v
 
 # -------- Demand Inputs (robust defaults + state) --------
 st.sidebar.header("Monthly Demand (hours)")
+# ==== RENDER ADVANCED HEADER ====
+render_advanced_header(total_initial, effective_salary_cost, budget)
+
 
 M = int(months)
 WH = int(working_hours)
@@ -529,5 +532,6 @@ if st.button("Optimize"):
     fig4 = go.Figure(data=[go.Pie(labels=labels, values=costs, textinfo='percent+label')])
     fig4.update_layout(title='Cost Distribution')
     st.plotly_chart(fig4, use_container_width=True)
+
 
 
