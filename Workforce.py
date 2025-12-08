@@ -195,20 +195,22 @@ if st.sidebar.button("Reset all monthly demands to capacity"):
     for i in range(M):
         st.session_state[f"demand_{i}"] = int(total_initial * WH)
 
-# render widgets (now values are already in state)
+
 demand = []
 for i in range(M):
     key = f"demand_{i}"
     if key not in st.session_state:
         st.session_state[key] = capacity_default
+
+    # Let Streamlit use st.session_state[key] as the initial value
     d = st.sidebar.number_input(
         f"Demand for Month {i+1}",
         min_value=0,
-        value=int(st.session_state[key]),
         step=100,
         key=key
     )
     demand.append(int(d))
+
 
 # ===================== RUN =====================
 if st.button("Optimize"):
@@ -331,3 +333,4 @@ if st.button("Optimize"):
     fig4 = go.Figure(data=[go.Pie(labels=labels, values=costs, textinfo='percent+label')])
     fig4.update_layout(title='Cost Distribution')
     st.plotly_chart(fig4, use_container_width=True)
+
