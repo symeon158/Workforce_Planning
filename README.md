@@ -1,159 +1,155 @@
 # Workforce Planning Optimization Model
 
-This repository contains a dynamic, interactive workforce planning optimization model built with **Python**, **Streamlit**, and **PuLP**.  
-The application helps organizations make informed workforce decisions by optimizing hiring, firing, and overtime usage while minimizing overall costs.
+An interactive workforce planning optimizer built with **Python**, **Streamlit**, **PuLP** and **Plotly**.
+It decides how many people to hire or let go each month, and how much overtime to use, so that demand is met at the lowest total cost — within your service level target and budget.
 
-👉 **[Launch Workforce Planning App](https://workforceplanning-mdrxrdzzkx9uyo5k8zvfuk.streamlit.app/)**  
+👉 **[Launch Workforce Planning App](https://workforceplanning-mdrxrdzzkx9uyo5k8zvfuk.streamlit.app/)**
 
 ---
 
 ## Features
 
-### Dynamic Grade Management
-- Input and manage multiple employee grades (e.g., Grade 1, Grade 2, etc.) with customizable counts and salary costs.  
-- The app calculates an effective (weighted average) salary cost based on your grade distribution for more realistic planning.
+### Workforce & Grades
+- Enter employee grades in an editable table (name, headcount, monthly salary) — add or remove rows freely.
+- The app computes total headcount and an effective (weighted average) monthly salary.
+- Set working hours per employee, the overtime cap per employee, and expected monthly **attrition** (voluntary leavers).
 
-### Comprehensive Cost Optimization
-The optimization model minimizes the total cost comprising:
-- Hiring  
-- Firing  
-- Salary  
-- Overtime  
-- Penalties for unmet demand  
+### Demand Planning
+- Generate monthly demand from a pattern: **base hours**, **monthly growth %**, **seasonality amplitude** and **peak month**.
+- Choose the first month and a horizon of 1–24 months; months are labelled with real dates (e.g. *Oct 2026*).
+- Override any individual month in the demand table.
 
-All while ensuring workforce balance, respecting overtime limits, and staying within a predefined budget.
+### Costs & Constraints
+- Hiring cost per hire, firing cost per exit, overtime cost per hour, penalty per unmet hour.
+- Maximum hires and firings per month.
+- **Service level target** — optionally enforced every month, or treated as a soft goal (unmet demand is only penalised).
+- **Budget** — auto-calculated as current payroll + a buffer %, or entered manually; the cap can be enforced or switched off.
 
-### User-Friendly Interface
-Built with Streamlit, the app offers an intuitive sidebar for configuring:
-- Model parameters (number of months, workforce parameters, cost factors)  
-- Demand (in hours)  
-- Grade distribution  
+### Results Dashboard
+The model re-solves automatically whenever an input changes (results are cached), and shows:
 
-This makes it easy to adjust the model dynamically based on your needs.
+- **KPIs** — planned spend, budget variance, service level achieved, headcount start → end (with total hires / fires), and savings vs. a *no-action* plan (keep today's headcount and cover gaps with overtime).
+- **Capacity vs demand** — stacked regular capacity, overtime and unmet hours against the demand line and the service target.
+- **Workforce** — headcount over time, with monthly hires, firings and attrition below it.
+- **Costs** — monthly cost by component, cumulative spend vs. the budget line, and a total cost breakdown.
+- **Plan table** — the full month-by-month plan with service-level bars and **CSV download**.
 
-### Interactive Visualizations
-Results are displayed in an interactive dashboard using Plotly, including:
-- Tabular results per period  
-- Bar charts for hired vs. fired employees  
-- Comparisons of overtime vs. unmet demand  
-- A line chart comparing total workforce capacity with demand  
-- A cost distribution pie chart  
-- A dynamic variance card showing the difference between the total cost and the budget (absolute and percentage), styled to indicate whether the project is under or over budget.
+### Infeasibility Diagnostics
+If no plan satisfies all constraints, the app explains why — e.g. *"Budget is too tight: the cost-optimal plan needs about €1.30M vs. a budget of €1.00M"* — or points to the hiring cap, overtime limit or service target as the blocker.
 
 ---
 
 ## Mathematical Formulation
 
-The core of this project is a **Linear Programming (LP)** model that minimizes the total cost of workforce management over a planning horizon (measured in months).  
-The model considers hiring, firing, salary, overtime, and penalties for unmet demand, while ensuring that production capacity meets demand and costs remain within budget.
-
----
+The core is a **Mixed-Integer Linear Programming (MILP)** model that minimizes the total cost of workforce management over a planning horizon of $N$ months.
 
 ### Decision Variables
 
-For each month $i$ ($i = 1, 2, \dots, N$):
+For each month $i$ ($i = 1, \dots, N$):
 
-- $H_i$: Number of employees hired in month $i$.  
-- $F_i$: Number of employees fired in month $i$.  
-- $E_i$: Total number of employees at the end of month $i$.  
-- $O_i$: Total overtime hours worked in month $i$.  
-- $U_i$: Unmet demand (in hours) in month $i$ that incurs a penalty.  
-
----
+| Variable | Meaning | Type |
+|---|---|---|
+| $H_i$ | Employees hired in month $i$ | Integer, $0 \le H_i \le \mathrm{max\\_hire}$ |
+| $F_i$ | Employees fired in month $i$ | Integer, $0 \le F_i \le \mathrm{max\\_fire}$ |
+| $E_i$ | Employees at the end of month $i$ | Integer, $\ge 0$ |
+| $O_i$ | Overtime hours in month $i$ | Continuous, $\ge 0$ |
+| $U_i$ | Unmet demand (hours) in month $i$ | Continuous, $\ge 0$ |
 
 ### Objective Function
-Minimize the total cost:
 
 $$
-Z = \sum_{i=1}^{N} \Big(
-\mathrm{hiring\_cost} \cdot H_i +
-\mathrm{firing\_cost} \cdot F_i +
-\mathrm{salary\_cost} \cdot E_i +
-\mathrm{overtime\_cost} \cdot O_i +
-\mathrm{penalty\_cost} \cdot U_i
+\min Z = \sum_{i=1}^{N} \Big(
+c_h H_i + c_f F_i + s \, E_i + c_o O_i + c_p U_i
 \Big)
 $$
 
----
+where $c_h$ = hiring cost, $c_f$ = firing cost, $s$ = effective monthly salary, $c_o$ = overtime cost per hour, $c_p$ = penalty per unmet hour.
 
-### Constraints  
+### Constraints
 
-**1. Workforce Balance**  
-First month:
-
-$$
-E_1 = \mathrm{initial\_employees} + H_1 - F_1
-$$
-
-Subsequent months ($i \geq 2$):
+**1. Workforce balance** (with $E_0$ = initial employees and $a$ = attrition per month)
 
 $$
-E_i = E_{i-1} + H_i - F_i
+E_i = E_{i-1} + H_i - F_i - a
 $$
 
----
-
-**2. Production Capacity**
+**2. Demand coverage** — regular hours plus overtime plus unmet hours cover demand $D_i$
 
 $$
-E_i \cdot \mathrm{working\_hours} + O_i + U_i \geq \mathrm{demand}_i \cdot \mathrm{service\_rate}
+E_i \cdot \mathrm{working\_hours} + O_i + U_i \geq D_i
 $$
 
----
-
-**3. Overtime Limit**
+**3. Overtime limit**
 
 $$
-O_i \leq E_i \cdot \mathrm{overtime\_rate}
+O_i \leq E_i \cdot \mathrm{overtime\_per\_employee}
 $$
 
----
-
-**4. Budget Constraint**
+**4. Service level** (when enforced) — at most $(1 - \sigma)$ of each month's demand may go unmet
 
 $$
-\sum_{i=1}^{N} \Big(
-\mathrm{hiring\_cost} \cdot H_i +
-\mathrm{firing\_cost} \cdot F_i +
-\mathrm{salary\_cost} \cdot E_i +
-\mathrm{overtime\_cost} \cdot O_i
-\Big) \leq \mathrm{Budget}
+U_i \leq (1 - \sigma) \cdot D_i
+$$
+
+**5. Budget** (when enforced) — planned spend, excluding penalties, stays within budget
+
+$$
+\sum_{i=1}^{N} \Big( c_h H_i + c_f F_i + s \, E_i + c_o O_i \Big) \leq \mathrm{Budget}
 $$
 
 ---
 
-## Handling Employee Grades  
+## Handling Employee Grades
 
-If employees are divided into grades with different salaries:  
+**Effective salary cost (weighted average)** — used by the model today. Example with 750 employees:
 
-**1. Effective Salary Cost (Weighted Average)**  
-Example with 750 employees:  
-- 500 × \$1500  
-- 100 × \$1700  
-- 75 × \$2000  
-- 75 × \$2500  
+- 500 × €1,500
+- 100 × €1,700
+- 75 × €2,000
+- 75 × €2,500
 
 $$
-\mathrm{Effective\ Salary\ Cost} =
-\frac{(500 \times 1500) + (100 \times 1700) + (75 \times 2000) + (75 \times 2500)}{750}
-$$  
+s = \frac{(500 \times 1500) + (100 \times 1700) + (75 \times 2000) + (75 \times 2500)}{750}
+$$
 
-**2. Separate Grade Modeling**  
-Introduce variables per grade ($E_{i,1}, E_{i,2}, \dots$) with respective salary costs.  
-This adds granularity but increases model complexity.  
+**Separate grade modeling** — a possible extension: introduce variables per grade ($E_{i,g}, H_{i,g}, \dots$) with their own salaries and hiring limits. This adds granularity at the cost of model size.
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.x  
-- [Streamlit](https://streamlit.io/)  
-- [PuLP](https://coin-or.github.io/pulp/)  
-- [Plotly](https://plotly.com/python/)  
-- [Pandas](https://pandas.pydata.org/)  
+- Python 3.10+
+- Dependencies in [`requirements.txt`](requirements.txt): Streamlit, PuLP, Pandas, Plotly
+
+> **Note on PuLP versions:** the app pins `pulp==2.9.0`, which bundles the CBC solver.
+> PuLP 4.x removed `LpStatus` / `PULP_CBC_CMD` and no longer ships a solver; the code includes
+> compatibility helpers, so with PuLP 4 it also works if a solver such as HiGHS is installed
+> (`pip install highspy`).
 
 ### Installation
 ```bash
-git clone https://github.com/your-username/workforce-planning-optimization.git
-cd workforce-planning-optimization
+git clone https://github.com/symeon158/Workforce_Planning.git
+cd Workforce_Planning
+pip install -r requirements.txt
+```
+
+### Run
+```bash
+streamlit run Workforce.py
+```
+
+The app opens at `http://localhost:8501`. Defaults (3 sample grades, 60 employees, seasonal demand) produce a plan immediately — replace them with your own data in the sidebar.
+
+---
+
+## Project Structure
+
+```
+Workforce_Planning/
+├── Workforce.py            # Streamlit app: inputs, MILP model, charts
+├── requirements.txt        # Pinned dependencies
+├── .streamlit/config.toml  # Theme settings
+├── .devcontainer/          # Dev container / Codespaces setup
+└── README.md
+```
