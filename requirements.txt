@@ -1,4 +1,7 @@
-pulp
-streamlit
-matplotlib
-plotly
+streamlit>=1.50,<2
+# PuLP 4.x removed LpStatus/PULP_CBC_CMD and no longer bundles the CBC solver
+pulp==2.9.0
+pandas>=2.2,<4
+plotly>=6.0,<8
+# Streamlit Cloud replaces pyarrow 26 (known segfault) on every boot; pin to skip that step
+pyarrow<25
