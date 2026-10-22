@@ -257,7 +257,6 @@ def breakdown_chart(df, cur):
 # ===================== STYLES & HEADER =====================
 st.markdown("""
 <style>
-  .block-container {padding-top: 2rem;}
   .wf-hero {border-left: 4px solid #2a78d6; padding: 0.2rem 0 0.2rem 1rem; margin-bottom: 1.2rem;}
   .wf-hero h1 {font-size: 1.9rem; font-weight: 700; margin: 0; padding: 0;}
   .wf-hero p {margin: 0.25rem 0 0 0; opacity: 0.7; font-size: 0.95rem;}
