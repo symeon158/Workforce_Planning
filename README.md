@@ -49,8 +49,8 @@ For each month $i$ ($i = 1, \dots, N$):
 
 | Variable | Meaning | Type |
 |---|---|---|
-| $H_i$ | Employees hired in month $i$ | Integer, $0 \le H_i \le \mathrm{max\\_hire}$ |
-| $F_i$ | Employees fired in month $i$ | Integer, $0 \le F_i \le \mathrm{max\\_fire}$ |
+| $H_i$ | Employees hired in month $i$ | Integer, $0 \le H_i \le H_{\max}$ |
+| $F_i$ | Employees fired in month $i$ | Integer, $0 \le F_i \le F_{\max}$ |
 | $E_i$ | Employees at the end of month $i$ | Integer, $\ge 0$ |
 | $O_i$ | Overtime hours in month $i$ | Continuous, $\ge 0$ |
 | $U_i$ | Unmet demand (hours) in month $i$ | Continuous, $\ge 0$ |
